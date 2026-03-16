@@ -11,6 +11,7 @@ import {
   CAVALRY_BASE_DPS,
   MAGE_BASE_DPS,
   damageMult,
+  armyDPSFull,
 } from '../engine/economy'
 import type { TroopType, UpgradeBranch } from '../types/game'
 import Decimal from 'break_infinity.js'
@@ -155,6 +156,13 @@ export default function ArmouryPanel() {
   const troopUpgrades = { infantry: infantryUpgrades, archer: archerUpgrades, cavalry: cavalryUpgrades, mage: mageUpgrades }
   const equipActions: Record<TroopType, () => void> = { infantry: equipInfantry, archer: equipArcher, cavalry: equipCavalry, mage: equipMage }
 
+  const totalDPS = armyDPSFull(
+    infantry, infantryUpgrades.damage,
+    archers, archerUpgrades.damage,
+    cavalry, cavalryUpgrades.damage,
+    mages, mageUpgrades.damage,
+  )
+
   const cfg = TROOPS.find(t => t.type === activeTab)!
   const count = troopCounts[activeTab]
   const upgrades = troopUpgrades[activeTab]
@@ -166,9 +174,22 @@ export default function ArmouryPanel() {
 
   return (
     <div
-      className="absolute flex"
+      className="absolute flex flex-col"
       style={{ right: 0, width: '28%', top: '22%', bottom: 0 }}
     >
+      {/* Header */}
+      <div className="flex items-center justify-between px-3 py-1.5 bg-slate-900/70 border-b border-slate-700">
+        <span className="text-slate-400 text-xs font-bold tracking-widest uppercase">Armoury</span>
+        <div className="flex items-center gap-2 text-xs text-slate-400">
+          {TROOPS.map(t => (
+            <span key={t.type}>{t.icon}{troopCounts[t.type]}</span>
+          ))}
+          <span className="text-slate-500">|</span>
+          <span>DPS: <span className="text-amber-400">{fmt(totalDPS)}</span></span>
+        </div>
+      </div>
+
+      <div className="flex flex-1 min-h-0">
       {/* Vertical tab list */}
       <div className="flex flex-col gap-1 pt-4 px-1 bg-slate-900/40">
         {TROOPS.map(t => {
@@ -256,6 +277,7 @@ export default function ArmouryPanel() {
             </div>
           )
         })}
+      </div>
       </div>
     </div>
   )
