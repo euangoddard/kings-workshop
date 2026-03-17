@@ -182,7 +182,7 @@ export default function ArmouryPanel() {
     mageUpgrades.damage,
   );
 
-  const cfg = TROOPS.find((t) => t.type === activeTab)!;
+  const cfg = TROOPS.find((t) => t.type === activeTab) as TroopConfig;
   const count = troopCounts[activeTab];
   const upgrades = troopUpgrades[activeTab];
   const equipCost = cfg.equipCostFn(count);
@@ -226,6 +226,7 @@ export default function ArmouryPanel() {
             const isActive = t.type === activeTab;
             return (
               <button
+                type="button"
                 key={t.type}
                 onClick={() => setActiveTab(t.type)}
                 className={`
@@ -266,6 +267,7 @@ export default function ArmouryPanel() {
 
           {/* Equip button */}
           <button
+            type="button"
             onClick={equipActions[activeTab]}
             disabled={!canEquip}
             className={`
@@ -314,6 +316,7 @@ export default function ArmouryPanel() {
                   </div>
                 </div>
                 <button
+                  type="button"
                   onClick={() => upgradeTroop(activeTab, branch)}
                   disabled={!canAfford}
                   className={`

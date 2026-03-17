@@ -39,6 +39,7 @@ export default function WorkshopPanel() {
 
         {/* Spawn button */}
         <button
+          type="button"
           onClick={clickSpawnSoldier}
           disabled={!canAfford}
           className={`

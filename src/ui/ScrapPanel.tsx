@@ -21,6 +21,7 @@ export default function ScrapPanel() {
     >
       <div className="w-full flex flex-col items-center gap-3">
         <button
+          type="button"
           onClick={handleClick}
           className={`
             w-full h-28 flex flex-col items-center justify-center rounded-lg border-2 font-bold text-sm transition-all duration-100 select-none

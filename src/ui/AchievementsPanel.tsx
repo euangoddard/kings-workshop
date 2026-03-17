@@ -113,6 +113,7 @@ export default function AchievementsPanel() {
 
         {/* Toggle button */}
         <button
+          type="button"
           onClick={() => setExpanded((e) => !e)}
           className="flex items-center gap-2 px-3 py-2 bg-slate-800/90 hover:bg-slate-700/90 border border-slate-600 rounded-lg text-xs text-slate-300 font-semibold transition-all cursor-pointer select-none backdrop-blur-sm shadow"
         >

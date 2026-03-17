@@ -121,6 +121,7 @@ export default function BossPanel() {
 
             {/* Fight button */}
             <button
+              type="button"
               onClick={clickFight}
               className="w-full py-1.5 bg-red-800 hover:bg-red-700 border border-red-600 rounded text-red-100 font-bold text-sm transition-all active:scale-95 cursor-pointer select-none"
             >
@@ -142,6 +143,7 @@ export default function BossPanel() {
             </div>
 
             <button
+              type="button"
               onClick={startBoss}
               className={`
                 w-full py-1.5 rounded font-bold text-sm transition-all active:scale-95 cursor-pointer select-none border

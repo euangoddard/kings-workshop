@@ -67,9 +67,13 @@ export class MainScene extends Phaser.Scene {
     this.buildCollectors();
 
     this.scale.on("resize", () => {
-      this.layoutObjects.forEach((obj) => obj.destroy());
+      this.layoutObjects.forEach((obj) => {
+        obj.destroy();
+      });
       this.layoutObjects = [];
-      this.maskGraphics.forEach((g) => g.destroy());
+      this.maskGraphics.forEach((g) => {
+        g.destroy();
+      });
       this.maskGraphics = [];
       this.buildLayout();
       this.buildCollectors();
@@ -286,7 +290,9 @@ export class MainScene extends Phaser.Scene {
     const trackY = bossH + mainH / 2 + 70;
 
     // destroy old
-    this.collectors.forEach((c) => c.rect.destroy());
+    this.collectors.forEach((c) => {
+      c.rect.destroy();
+    });
     this.collectors = [];
 
     const state = gameStore.getState();

@@ -39,6 +39,7 @@ function UpgradeRow({
         <div className="text-cyan-400 text-xs">{current}</div>
       </div>
       <button
+        type="button"
         onClick={onUpgrade}
         disabled={!canAfford}
         className={`

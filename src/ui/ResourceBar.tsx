@@ -152,12 +152,14 @@ export default function ResourceBar() {
           Help
         </a>
         <button
+          type="button"
           onClick={saveGame}
           className="px-3 py-1 text-xs bg-slate-700 hover:bg-slate-600 text-slate-300 rounded border border-slate-600 transition-colors"
         >
           Save
         </button>
         <button
+          type="button"
           onClick={() => {
             if (window.confirm("Reset all progress? This cannot be undone."))
               resetGame();
