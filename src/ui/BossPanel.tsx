@@ -7,16 +7,8 @@ import {
   effectiveBossReward,
   isEliteBoss,
 } from "../engine/economy";
+import { fmt } from "../lib/format";
 import { useGameStore } from "../store/gameStore";
-
-function fmt(d: Decimal | number): string {
-  const n = typeof d === "number" ? d : d.toNumber();
-  if (!Number.isFinite(n)) return "???";
-  if (n >= 1e9) return `${(n / 1e9).toFixed(2)}B`;
-  if (n >= 1e6) return `${(n / 1e6).toFixed(2)}M`;
-  if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
-  return Math.floor(n).toLocaleString();
-}
 
 export default function BossPanel() {
   const currentBoss = useGameStore((s) => s.currentBoss);
