@@ -3,8 +3,8 @@ import { useGameStore } from "../store/gameStore";
 
 function fmt(n: number | Decimal): string {
   const v = typeof n === "number" ? n : n.toNumber();
-  if (v >= 1e6) return (v / 1e6).toFixed(2) + "M";
-  if (v >= 1e3) return (v / 1e3).toFixed(1) + "K";
+  if (v >= 1e6) return `${(v / 1e6).toFixed(2)}M`;
+  if (v >= 1e3) return `${(v / 1e3).toFixed(1)}K`;
   return Math.floor(v).toLocaleString();
 }
 

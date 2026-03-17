@@ -4,19 +4,19 @@ import { useGameStore } from "../store/gameStore";
 
 function fmt(d: Decimal): string {
   const n = d.toNumber();
-  if (!isFinite(n) || d.gte(new Decimal("1e15"))) return d.toExponential(2);
-  if (n >= 1e12) return (n / 1e12).toFixed(2) + "T";
-  if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
-  if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
-  if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
+  if (!Number.isFinite(n) || d.gte(new Decimal("1e15"))) return d.toExponential(2);
+  if (n >= 1e12) return `${(n / 1e12).toFixed(2)}T`;
+  if (n >= 1e9) return `${(n / 1e9).toFixed(2)}B`;
+  if (n >= 1e6) return `${(n / 1e6).toFixed(2)}M`;
+  if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
   return Math.floor(n).toLocaleString();
 }
 
 function fmtNum(n: number): string {
-  if (!isFinite(n)) return "0";
-  if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
-  if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
-  if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
+  if (!Number.isFinite(n)) return "0";
+  if (n >= 1e9) return `${(n / 1e9).toFixed(2)}B`;
+  if (n >= 1e6) return `${(n / 1e6).toFixed(2)}M`;
+  if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
   return n.toFixed(1);
 }
 

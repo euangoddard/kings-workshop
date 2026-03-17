@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import {
-  armyDPSFull,
   effectiveCollectorCapacity,
   effectiveCollectorCount,
 } from "../../engine/economy";
@@ -37,10 +36,6 @@ interface CollectorVisual {
 
 export class MainScene extends Phaser.Scene {
   private collectors: CollectorVisual[] = [];
-  private scrapLabel!: Phaser.GameObjects.Text;
-  private scrapSubLabel!: Phaser.GameObjects.Text;
-  private workshopLabel!: Phaser.GameObjects.Text;
-  private bossZone!: Phaser.GameObjects.Rectangle;
   private floatTexts: Array<{
     text: Phaser.GameObjects.Text;
     vy: number;
@@ -127,7 +122,6 @@ export class MainScene extends Phaser.Scene {
     const bossRect = track(
       this.add.rectangle(width / 2, bossH / 2, width - 4, bossH - 4, C.panel),
     ) as Phaser.GameObjects.Rectangle;
-    this.bossZone = bossRect;
     addZoneBackground("boss_bg", width / 2, bossH / 2, width - 4, bossH - 4);
     bossRect.setStrokeStyle(1, C.border);
 
@@ -163,7 +157,7 @@ export class MainScene extends Phaser.Scene {
     track(this.add.rectangle(pileX - 4, pileY - 22, 30, 10, 0x475569));
 
     track(this.add.rectangle(scrapX, mainY + 28, 140, 24, 0x000000, 0.5));
-    this.scrapLabel = track(
+    track(
       this.add
         .text(scrapX, mainY + 28, "SCRAPYARD", {
           fontSize: "11px",
@@ -172,9 +166,9 @@ export class MainScene extends Phaser.Scene {
           letterSpacing: 3,
         })
         .setOrigin(0.5),
-    ) as Phaser.GameObjects.Text;
+    );
 
-    this.scrapSubLabel = track(
+    track(
       this.add
         .text(scrapX, mainY + 46, "Click to collect", {
           fontSize: "10px",
@@ -184,7 +178,7 @@ export class MainScene extends Phaser.Scene {
           padding: { x: 4, y: 2 },
         })
         .setOrigin(0.5),
-    ) as Phaser.GameObjects.Text;
+    );
 
     // -----------------------------------------------------------------------
     // Workshop zone (center)
@@ -198,7 +192,7 @@ export class MainScene extends Phaser.Scene {
     wsBg.setStrokeStyle(2, C.gold);
 
     track(this.add.rectangle(wsX, mainY + 28, 160, 24, 0x000000, 0.5));
-    this.workshopLabel = track(
+    track(
       this.add
         .text(wsX, mainY + 28, "KING'S WORKSHOP", {
           fontSize: "11px",
@@ -207,7 +201,7 @@ export class MainScene extends Phaser.Scene {
           letterSpacing: 2,
         })
         .setOrigin(0.5),
-    ) as Phaser.GameObjects.Text;
+    );
 
     // Anvil visual
     const anvX = wsX;
@@ -285,8 +279,8 @@ export class MainScene extends Phaser.Scene {
     const { width, height } = this.scale;
     const bossH = height * 0.22;
     const mainH = height - bossH;
-    const scrapW = width * 0.28;
-    const workshopW = width * 0.44;
+    const _scrapW = width * 0.28;
+    const _workshopW = width * 0.44;
     const trackY = bossH + mainH / 2 + 70;
 
     // destroy old
@@ -385,10 +379,10 @@ export class MainScene extends Phaser.Scene {
   }
 }
 
-function formatBig(d: { toString(): string; toNumber(): number }): string {
+function _formatBig(d: { toString(): string; toNumber(): number }): string {
   const n = d.toNumber();
-  if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
-  if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
-  if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
+  if (n >= 1e9) return `${(n / 1e9).toFixed(2)}B`;
+  if (n >= 1e6) return `${(n / 1e6).toFixed(2)}M`;
+  if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
   return Math.floor(n).toString();
 }
