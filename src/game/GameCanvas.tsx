@@ -1,20 +1,20 @@
-import { useEffect, useRef } from 'preact/hooks'
-import Phaser from 'phaser'
-import { MainScene } from './scenes/MainScene'
+import Phaser from "phaser";
+import { useEffect, useRef } from "preact/hooks";
+import { MainScene } from "./scenes/MainScene";
 
 export default function GameCanvas() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const gameRef = useRef<Phaser.Game | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null);
+  const gameRef = useRef<Phaser.Game | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current || gameRef.current) return
+    if (!containerRef.current || gameRef.current) return;
 
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
       parent: containerRef.current,
-      width: '100%',
-      height: '100%',
-      backgroundColor: '#0f172a',
+      width: "100%",
+      height: "100%",
+      backgroundColor: "#0f172a",
       scene: [MainScene],
       scale: {
         mode: Phaser.Scale.RESIZE,
@@ -24,15 +24,15 @@ export default function GameCanvas() {
         antialias: true,
         pixelArt: false,
       },
-    }
+    };
 
-    gameRef.current = new Phaser.Game(config)
+    gameRef.current = new Phaser.Game(config);
 
     return () => {
-      gameRef.current?.destroy(true)
-      gameRef.current = null
-    }
-  }, [])
+      gameRef.current?.destroy(true);
+      gameRef.current = null;
+    };
+  }, []);
 
   return (
     <div
@@ -40,5 +40,5 @@ export default function GameCanvas() {
       className="absolute inset-0 w-full h-full"
       style={{ zIndex: 0 }}
     />
-  )
+  );
 }

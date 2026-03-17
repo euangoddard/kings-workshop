@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
-import { useGameStore } from "../store/gameStore";
 import { CRIT_CHANCE, CRIT_MULTIPLIER } from "../engine/economy";
+import { useGameStore } from "../store/gameStore";
 
 export default function ScrapPanel() {
   const clickScrap = useGameStore((s) => s.clickScrap);

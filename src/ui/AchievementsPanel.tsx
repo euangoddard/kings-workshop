@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { useGameStore } from "../store/gameStore";
 import type { Achievement } from "../types/game";
 

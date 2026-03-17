@@ -1,5 +1,5 @@
-import { useGameStore } from "../store/gameStore";
 import Decimal from "break_infinity.js";
+import { useGameStore } from "../store/gameStore";
 
 function fmt(n: number | Decimal): string {
   const v = typeof n === "number" ? n : n.toNumber();

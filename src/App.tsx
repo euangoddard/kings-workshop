@@ -1,20 +1,20 @@
-import { useEffect } from 'preact/hooks'
-import GameCanvas from './game/GameCanvas'
-import ResourceBar from './ui/ResourceBar'
-import ScrapPanel from './ui/ScrapPanel'
-import WorkshopPanel from './ui/WorkshopPanel'
-import ArmouryPanel from './ui/ArmouryPanel'
-import CollectorPanel from './ui/CollectorPanel'
-import BossPanel from './ui/BossPanel'
-import AchievementsPanel from './ui/AchievementsPanel'
-import { useGameStore } from './store/gameStore'
+import { useEffect } from "preact/hooks";
+import GameCanvas from "./game/GameCanvas";
+import { useGameStore } from "./store/gameStore";
+import AchievementsPanel from "./ui/AchievementsPanel";
+import ArmouryPanel from "./ui/ArmouryPanel";
+import BossPanel from "./ui/BossPanel";
+import CollectorPanel from "./ui/CollectorPanel";
+import ResourceBar from "./ui/ResourceBar";
+import ScrapPanel from "./ui/ScrapPanel";
+import WorkshopPanel from "./ui/WorkshopPanel";
 
 export default function App() {
-  const loadGame = useGameStore(s => s.loadGame)
+  const loadGame = useGameStore((s) => s.loadGame);
 
   useEffect(() => {
-    loadGame()
-  }, [loadGame])
+    loadGame();
+  }, [loadGame]);
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-slate-950">
@@ -22,7 +22,10 @@ export default function App() {
       <GameCanvas />
 
       {/* React UI overlay */}
-      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 10 }}>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ zIndex: 10 }}
+      >
         {/* All interactive elements re-enable pointer events */}
         <div className="pointer-events-auto">
           <ResourceBar />
@@ -31,7 +34,7 @@ export default function App() {
         {/* Main game area — starts below resource bar (top bar ~48px) */}
         <div
           className="absolute"
-          style={{ top: '48px', left: 0, right: 0, bottom: 0 }}
+          style={{ top: "48px", left: 0, right: 0, bottom: 0 }}
         >
           {/* Boss panel — top 22% of remaining area */}
           <div className="pointer-events-auto">
@@ -66,5 +69,5 @@ export default function App() {
         </div>
       </div>
     </div>
-  )
+  );
 }

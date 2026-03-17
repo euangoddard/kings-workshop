@@ -1,10 +1,10 @@
 import Phaser from "phaser";
-import { gameStore } from "../../store/gameStore";
 import {
+  armyDPSFull,
   effectiveCollectorCapacity,
   effectiveCollectorCount,
-  armyDPSFull,
 } from "../../engine/economy";
+import { gameStore } from "../../store/gameStore";
 
 // ---------------------------------------------------------------------------
 // Colour palette
@@ -133,9 +133,21 @@ export class MainScene extends Phaser.Scene {
     const scrapX = scrapW / 2;
     const scrapY = mainY + mainH / 2;
     const scrapBg = track(
-      this.add.rectangle(scrapX, mainY + mainH / 2, scrapW - 4, mainH - 4, C.panel),
+      this.add.rectangle(
+        scrapX,
+        mainY + mainH / 2,
+        scrapW - 4,
+        mainH - 4,
+        C.panel,
+      ),
     ) as Phaser.GameObjects.Rectangle;
-    addZoneBackground("scrap_bg", scrapX, mainY + mainH / 2, scrapW - 4, mainH - 4);
+    addZoneBackground(
+      "scrap_bg",
+      scrapX,
+      mainY + mainH / 2,
+      scrapW - 4,
+      mainH - 4,
+    );
     scrapBg.setStrokeStyle(1, C.border);
 
     // Scrap pile visual — layered rects
@@ -230,23 +242,37 @@ export class MainScene extends Phaser.Scene {
 
     // Infantry shields (purple)
     const infX = armX - stSpacing * 1.5;
-    track(this.add.rectangle(infX, stY, 14, 18, 0x4338ca).setStrokeStyle(1, 0x8b5cf6));
+    track(
+      this.add
+        .rectangle(infX, stY, 14, 18, 0x4338ca)
+        .setStrokeStyle(1, 0x8b5cf6),
+    );
     track(this.add.triangle(infX, stY + 10, -7, 0, 7, 0, 0, 8, 0x3730a3));
 
     // Archer station (green bow shape)
     const archX = armX - stSpacing * 0.5;
-    track(this.add.rectangle(archX, stY, 5, 18, 0x15803d).setStrokeStyle(1, 0x22c55e));
+    track(
+      this.add
+        .rectangle(archX, stY, 5, 18, 0x15803d)
+        .setStrokeStyle(1, 0x22c55e),
+    );
     track(this.add.rectangle(archX + 6, stY, 12, 3, 0x854d0e));
 
     // Cavalry station (amber horseshoe shape)
     const cavX = armX + stSpacing * 0.5;
-    track(this.add.rectangle(cavX, stY, 16, 12, 0xb45309).setStrokeStyle(1, 0xf59e0b));
+    track(
+      this.add
+        .rectangle(cavX, stY, 16, 12, 0xb45309)
+        .setStrokeStyle(1, 0xf59e0b),
+    );
     track(this.add.rectangle(cavX, stY + 8, 10, 4, 0x92400e));
 
     // Mage station (blue crystal)
     const mageX = armX + stSpacing * 1.5;
     track(
-      this.add.rectangle(mageX, stY - 4, 10, 14, 0x1d4ed8).setStrokeStyle(1, 0x3b82f6),
+      this.add
+        .rectangle(mageX, stY - 4, 10, 14, 0x1d4ed8)
+        .setStrokeStyle(1, 0x3b82f6),
     );
     track(this.add.triangle(mageX, stY - 12, -5, 0, 5, 0, 0, -8, 0x1e40af));
   }
@@ -327,7 +353,6 @@ export class MainScene extends Phaser.Scene {
     });
 
     // Boss HP bar logic removed to prevent overlap with React UI
-
 
     // Float text cleanup
     this.floatTexts = this.floatTexts.filter((ft) => {
