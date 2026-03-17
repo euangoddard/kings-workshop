@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'preact/hooks'
 import Phaser from 'phaser'
 import { MainScene } from './scenes/MainScene'
 

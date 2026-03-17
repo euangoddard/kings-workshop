@@ -123,6 +123,14 @@ export default function ResourceBar() {
 
       {/* Right: controls */}
       <div className="flex items-center gap-2">
+        <a
+          href="/help.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-3 py-1 text-xs bg-slate-700 hover:bg-slate-600 text-slate-300 rounded border border-slate-600 transition-colors"
+        >
+          Help
+        </a>
         <button
           onClick={saveGame}
           className="px-3 py-1 text-xs bg-slate-700 hover:bg-slate-600 text-slate-300 rounded border border-slate-600 transition-colors"

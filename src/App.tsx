@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect } from 'preact/hooks'
 import GameCanvas from './game/GameCanvas'
 import ResourceBar from './ui/ResourceBar'
 import ScrapPanel from './ui/ScrapPanel'
