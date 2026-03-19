@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Dark background -->
+  <rect width="32" height="32" rx="5" fill="#0f172a"/>
+  <!-- Forge glow behind crown -->
+  <radialGradient id="glow" cx="50%" cy="70%" r="50%">
+    <stop offset="0%" stop-color="#f97316" stop-opacity="0.35"/>
+    <stop offset="100%" stop-color="#f97316" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="32" height="32" rx="5" fill="url(#glow)"/>
+  <!-- Crown body -->
+  <path d="M4 22 L4 10 L10 16 L16 7 L22 16 L28 10 L28 22 Z" fill="#d97706"/>
+  <!-- Crown base band -->
+  <rect x="4" y="22" width="24" height="4" rx="1" fill="#b45309"/>
+  <!-- Crown highlight on points -->
+  <path d="M16 7 L13 14 L16 12 L19 14 Z" fill="#fbbf24"/>
+  <!-- Central gem -->
+  <circle cx="16" cy="20" r="2" fill="#fef3c7"/>
+  <circle cx="16" cy="20" r="1.2" fill="#fcd34d"/>
+  <!-- Side gems -->
+  <circle cx="9" cy="23" r="1.2" fill="#fcd34d"/>
+  <circle cx="23" cy="23" r="1.2" fill="#fcd34d"/>
+</svg>
