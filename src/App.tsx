@@ -1,5 +1,6 @@
 import { useEffect } from "preact/hooks";
-import GameCanvas from "./game/GameCanvas";
+import GameScene from "./game/GameScene";
+import { useGameLoop } from "./game/useGameLoop";
 import { useGameStore } from "./store/gameStore";
 import AchievementsPanel from "./ui/AchievementsPanel";
 import ArmouryPanel from "./ui/ArmouryPanel";
@@ -16,10 +17,12 @@ export default function App() {
     loadGame();
   }, [loadGame]);
 
+  useGameLoop();
+
   return (
     <div className="relative w-full h-full overflow-hidden bg-slate-950">
-      {/* Phaser canvas layer */}
-      <GameCanvas />
+      {/* HTML/CSS scene layer */}
+      <GameScene />
 
       {/* React UI overlay */}
       <div

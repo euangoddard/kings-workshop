@@ -1,3 +1,5 @@
+import { useEffect, useState } from "preact/hooks";
+import { getBossMetadata } from "../data/bosses";
 import {
   armyDPSFull,
   bossDamage,
@@ -8,8 +10,6 @@ import {
 } from "../engine/economy";
 import { fmt } from "../lib/format";
 import { useGameStore } from "../store/gameStore";
-import { getBossMetadata } from "../data/bosses";
-import { useState, useEffect } from "preact/hooks";
 
 export default function BossPanel() {
   const currentBoss = useGameStore((s) => s.currentBoss);

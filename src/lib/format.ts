@@ -15,6 +15,8 @@ export function fmtNum(n: number): string {
 export function fmt(d: Decimal | number): string {
   const n = typeof d === "number" ? d : d.toNumber();
   if (!Number.isFinite(n)) return "???";
-  if (d instanceof Decimal && d.gte(new Decimal("1e15"))) return d.toExponential(2);
+  if (d instanceof Decimal && d.gte(new Decimal("1e15"))) {
+    return d.toExponential(2);
+  }
   return compact.format(n);
 }

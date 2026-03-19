@@ -711,8 +711,5 @@ export const useGameStore = create<Store>((set, get) => ({
   },
 }));
 
-// Expose a stable reference for Phaser (no React hooks needed in scenes)
-export const gameStore = useGameStore;
-
 // Re-export bossDamage for consumers that need it alongside other store imports
 export { bossDamage, isEliteBoss };

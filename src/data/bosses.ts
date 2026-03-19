@@ -25,21 +25,24 @@ export const BOSS_LIST: BossMetadata[] = [
     id: 2,
     name: "Shadow Alchemist",
     image: "/assets/bosses/boss_3.png",
-    description: "A mysterious figure shrouded in purple smoke and toxic potions.",
+    description:
+      "A mysterious figure shrouded in purple smoke and toxic potions.",
     color: "#7e22ce", // purple-700
   },
   {
     id: 3,
     name: "Ironclad Wyvern",
     image: "/assets/bosses/boss_4.png",
-    description: "A fire-breathing dragon with plates of iron bolted to its scales.",
+    description:
+      "A fire-breathing dragon with plates of iron bolted to its scales.",
     color: "#dc2626", // red-600
   },
   {
     id: 4,
     name: "Cursed King",
     image: "/assets/bosses/boss_5.png",
-    description: "A spectral, decaying king with a broken crown and a glowing blue sword.",
+    description:
+      "A spectral, decaying king with a broken crown and a glowing blue sword.",
     color: "#3b82f6", // blue-500
   },
   {
@@ -53,28 +56,32 @@ export const BOSS_LIST: BossMetadata[] = [
     id: 6,
     name: "Clockwork Sentinel",
     image: "/assets/bosses/boss_7.png",
-    description: "A golden mechanical soldier with four arms and ticking gears.",
+    description:
+      "A golden mechanical soldier with four arms and ticking gears.",
     color: "#eab308", // yellow-500
   },
   {
     id: 7,
     name: "Bone Harvester",
     image: "/assets/bosses/boss_8.png",
-    description: "A skeletal necromancer with a giant bone scythe and tattered robes.",
+    description:
+      "A skeletal necromancer with a giant bone scythe and tattered robes.",
     color: "#f8fafc", // slate-50 (bone)
   },
   {
     id: 8,
     name: "Storm Giant",
     image: "/assets/bosses/boss_9.png",
-    description: "A towering figure made of storm clouds and crackling lightning.",
+    description:
+      "A towering figure made of storm clouds and crackling lightning.",
     color: "#2dd4bf", // teal-400
   },
   {
     id: 9,
     name: "Apex Predator",
     image: "/assets/bosses/boss_10.png",
-    description: "A mutated, monstrous dire wolf with glowing red veins and spikes.",
+    description:
+      "A mutated, monstrous dire wolf with glowing red veins and spikes.",
     color: "#0f172a", // slate-950
   },
 ];
