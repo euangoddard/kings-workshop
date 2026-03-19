@@ -176,7 +176,9 @@ function checkAchievements(s: GameState): Achievement[] {
   const now = Date.now();
   let changed = false;
   const updated = s.achievements.map((a) => {
-    if (a.unlocked) return a;
+    if (a.unlocked) {
+      return a;
+    }
 
     let shouldUnlock = false;
     switch (a.id) {
@@ -428,7 +430,9 @@ export const useGameStore = create<Store>((set, get) => ({
   clickSpawnSoldier: () => {
     const s = get();
     const cost = new Decimal(s.soldierClickCost);
-    if (s.nutsAndBolts.lt(cost)) return;
+    if (s.nutsAndBolts.lt(cost)) {
+      return;
+    }
     const newTotal = s.totalSoldiersSpawned + 1;
     const next: Partial<GameState> = {
       nutsAndBolts: s.nutsAndBolts.sub(cost),
@@ -446,9 +450,13 @@ export const useGameStore = create<Store>((set, get) => ({
   // -------------------------------------------------------------------------
   equipInfantry: () => {
     const s = get();
-    if (s.soldiers < 1) return;
+    if (s.soldiers < 1) {
+      return;
+    }
     const cost = infantryEquipCost(s.infantry);
-    if (s.nutsAndBolts.lt(cost)) return;
+    if (s.nutsAndBolts.lt(cost)) {
+      return;
+    }
     const next: Partial<GameState> = {
       nutsAndBolts: s.nutsAndBolts.sub(cost),
       soldiers: s.soldiers - 1,
@@ -461,9 +469,13 @@ export const useGameStore = create<Store>((set, get) => ({
 
   equipArcher: () => {
     const s = get();
-    if (s.soldiers < 1) return;
+    if (s.soldiers < 1) {
+      return;
+    }
     const cost = archerEquipCost(s.archers);
-    if (s.nutsAndBolts.lt(cost)) return;
+    if (s.nutsAndBolts.lt(cost)) {
+      return;
+    }
     const next: Partial<GameState> = {
       nutsAndBolts: s.nutsAndBolts.sub(cost),
       soldiers: s.soldiers - 1,
@@ -476,9 +488,13 @@ export const useGameStore = create<Store>((set, get) => ({
 
   equipCavalry: () => {
     const s = get();
-    if (s.soldiers < 1) return;
+    if (s.soldiers < 1) {
+      return;
+    }
     const cost = cavalryEquipCost(s.cavalry);
-    if (s.nutsAndBolts.lt(cost)) return;
+    if (s.nutsAndBolts.lt(cost)) {
+      return;
+    }
     const next: Partial<GameState> = {
       nutsAndBolts: s.nutsAndBolts.sub(cost),
       soldiers: s.soldiers - 1,
@@ -491,9 +507,13 @@ export const useGameStore = create<Store>((set, get) => ({
 
   equipMage: () => {
     const s = get();
-    if (s.soldiers < 1) return;
+    if (s.soldiers < 1) {
+      return;
+    }
     const cost = mageEquipCost(s.mages);
-    if (s.nutsAndBolts.lt(cost)) return;
+    if (s.nutsAndBolts.lt(cost)) {
+      return;
+    }
     const next: Partial<GameState> = {
       nutsAndBolts: s.nutsAndBolts.sub(cost),
       soldiers: s.soldiers - 1,
@@ -513,7 +533,9 @@ export const useGameStore = create<Store>((set, get) => ({
     const upgrades = s[upgradeKey] as typeof s.infantryUpgrades;
     const currentLevel = upgrades[branch];
     const cost = troopUpgradeCost(type, branch, currentLevel);
-    if (s.nutsAndBolts.lt(cost)) return;
+    if (s.nutsAndBolts.lt(cost)) {
+      return;
+    }
 
     const updatedUpgrades = { ...upgrades, [branch]: currentLevel + 1 };
     const next: Partial<GameState> = {
@@ -531,7 +553,9 @@ export const useGameStore = create<Store>((set, get) => ({
   upgradeCollectorSpeed: () => {
     const s = get();
     const cost = collectorUpgradeCost("speed", s.collectorSpeed);
-    if (s.nutsAndBolts.lt(cost)) return;
+    if (s.nutsAndBolts.lt(cost)) {
+      return;
+    }
     const next: Partial<GameState> = {
       nutsAndBolts: s.nutsAndBolts.sub(cost),
       collectorSpeed: s.collectorSpeed + 1,
@@ -544,7 +568,9 @@ export const useGameStore = create<Store>((set, get) => ({
   upgradeCollectorCapacity: () => {
     const s = get();
     const cost = collectorUpgradeCost("capacity", s.collectorCapacity);
-    if (s.nutsAndBolts.lt(cost)) return;
+    if (s.nutsAndBolts.lt(cost)) {
+      return;
+    }
     const next: Partial<GameState> = {
       nutsAndBolts: s.nutsAndBolts.sub(cost),
       collectorCapacity: s.collectorCapacity + 1,
@@ -557,7 +583,9 @@ export const useGameStore = create<Store>((set, get) => ({
   upgradeCollectorCount: () => {
     const s = get();
     const cost = collectorUpgradeCost("count", s.collectorCount);
-    if (s.nutsAndBolts.lt(cost)) return;
+    if (s.nutsAndBolts.lt(cost)) {
+      return;
+    }
     const next: Partial<GameState> = {
       nutsAndBolts: s.nutsAndBolts.sub(cost),
       collectorCount: s.collectorCount + 1,
@@ -572,14 +600,18 @@ export const useGameStore = create<Store>((set, get) => ({
   // -------------------------------------------------------------------------
   startBoss: () => {
     const s = get();
-    if (s.bossActive) return;
+    if (s.bossActive) {
+      return;
+    }
     const hp = effectiveBossHP(s.currentBoss);
     set({ bossActive: true, bossHP: hp, bossMaxHP: hp });
   },
 
   clickFight: () => {
     const s = get();
-    if (!s.bossActive) return;
+    if (!s.bossActive) {
+      return;
+    }
     const dmg = new Decimal(clickFightDamage(s.soldiers));
     const newHP = Decimal.max(new Decimal(0), s.bossHP.sub(dmg));
     if (newHP.lte(0)) {
@@ -697,7 +729,9 @@ export const useGameStore = create<Store>((set, get) => ({
   loadGame: () => {
     try {
       const raw = localStorage.getItem(SAVE_KEY);
-      if (!raw) return;
+      if (!raw) {
+        return;
+      }
       const data: SerializedGameState = JSON.parse(raw);
       set(deserialize(data));
     } catch (e) {

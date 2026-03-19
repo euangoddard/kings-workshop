@@ -143,8 +143,9 @@ export default function ResourceBar() {
         <button
           type="button"
           onClick={() => {
-            if (window.confirm("Reset all progress? This cannot be undone."))
+            if (window.confirm("Reset all progress? This cannot be undone.")) {
               resetGame();
+            }
           }}
           className="px-3 py-1 text-xs bg-red-900/60 hover:bg-red-800/60 text-red-300 rounded border border-red-800 transition-colors"
         >

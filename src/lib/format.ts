@@ -7,14 +7,18 @@ const compact = new Intl.NumberFormat("en", {
 
 /** Format a plain number with compact K/M/B/T notation. */
 export function fmtNum(n: number): string {
-  if (!Number.isFinite(n)) return "0";
+  if (!Number.isFinite(n)) {
+    return "0";
+  }
   return compact.format(n);
 }
 
 /** Format a Decimal, falling back to exponential notation for values ≥ 1e15. */
 export function fmt(d: Decimal | number): string {
   const n = typeof d === "number" ? d : d.toNumber();
-  if (!Number.isFinite(n)) return "???";
+  if (!Number.isFinite(n)) {
+    return "???";
+  }
   if (d instanceof Decimal && d.gte(new Decimal("1e15"))) {
     return d.toExponential(2);
   }

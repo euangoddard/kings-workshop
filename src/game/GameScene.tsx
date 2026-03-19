@@ -245,11 +245,15 @@ function CollectorTrack() {
       const color = `rgb(${r},${g},${b})`;
 
       const track = trackRef.current;
-      if (!track) return;
+      if (!track) {
+        return;
+      }
       const trackWidth = track.offsetWidth;
 
       for (const dot of dotsRef.current) {
-        if (!dot) continue;
+        if (!dot) {
+          continue;
+        }
         const x = fillRatio * (trackWidth - 22);
         gsap.set(dot, { x });
         dot.style.background = `rgba(${r},${g},${b},0.9)`;
