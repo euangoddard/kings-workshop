@@ -53,6 +53,10 @@ export interface GameState {
   // Achievements
   achievements: Achievement[];
 
+  // Click upgrades
+  scrapValueLevel: number;
+  critChanceLevel: number;
+
   // Meta
   lastSaveTime: number;
   lastTickTime: number;
@@ -76,6 +80,9 @@ export interface GameActions {
   upgradeCollectorSpeed: () => void;
   upgradeCollectorCapacity: () => void;
   upgradeCollectorCount: () => void;
+
+  upgradeScrapValue: () => void;
+  upgradeCritChance: () => void;
 
   startBoss: () => void;
   _defeatBoss: () => void;
@@ -115,6 +122,8 @@ export interface SerializedGameState {
   bossActive: boolean;
   totalBossesDefeated: number;
   achievements: Achievement[];
+  scrapValueLevel: number;
+  critChanceLevel: number;
   lastSaveTime: number;
   lastTickTime: number;
 }

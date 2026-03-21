@@ -4,16 +4,19 @@ import {
   archerEquipCost,
   armyDPSFull,
   bossDamage,
-  CRIT_CHANCE,
-  CRIT_MULTIPLIER,
   cavalryEquipCost,
   clickFightDamage,
+  clickPower,
+  clickPowerUpgradeCost,
   collectorUpgradeCost,
+  critChanceUpgradeCost,
+  CRIT_MULTIPLIER,
   effectiveBossHP,
   effectiveBossReward,
   effectiveCollectorCapacity,
   effectiveCollectorCount,
   effectiveCollectorSpeed,
+  effectiveCritChance,
   infantryEquipCost,
   isEliteBoss,
   mageEquipCost,
@@ -322,6 +325,9 @@ function freshState(): GameState {
 
     achievements: defaultAchievements(),
 
+    scrapValueLevel: 0,
+    critChanceLevel: 0,
+
     lastSaveTime: Date.now(),
     lastTickTime: Date.now(),
   };
@@ -355,6 +361,8 @@ function serialize(s: GameState): SerializedGameState {
     bossActive: s.bossActive,
     totalBossesDefeated: s.totalBossesDefeated,
     achievements: s.achievements,
+    scrapValueLevel: s.scrapValueLevel,
+    critChanceLevel: s.critChanceLevel,
     lastSaveTime: s.lastSaveTime,
     lastTickTime: Date.now(),
   };
@@ -392,6 +400,8 @@ function deserialize(raw: SerializedGameState): GameState {
     bossActive: raw.bossActive,
     totalBossesDefeated: raw.totalBossesDefeated ?? 0,
     achievements: mergedAchievements,
+    scrapValueLevel: raw.scrapValueLevel ?? 0,
+    critChanceLevel: raw.critChanceLevel ?? 0,
     lastSaveTime: raw.lastSaveTime,
     lastTickTime: raw.lastTickTime,
   };
@@ -409,15 +419,18 @@ export const useGameStore = create<Store>((set, get) => ({
   // Clicking the scrap pile — earns 1 N&B (or 5x on crit)
   // -------------------------------------------------------------------------
   clickScrap: () => {
-    const isCrit = Math.random() < CRIT_CHANCE;
-    const gain = isCrit ? CRIT_MULTIPLIER : 1;
-    set((s) => {
+    const s = get();
+    const critChance = effectiveCritChance(s.critChanceLevel);
+    const isCrit = Math.random() < critChance;
+    const power = clickPower(s.scrapValueLevel);
+    const gain = isCrit ? power * CRIT_MULTIPLIER : power;
+    set((prevS) => {
       const next: Partial<GameState> = {
-        nutsAndBolts: s.nutsAndBolts.add(gain),
-        totalNutsAndBoltsEarned: s.totalNutsAndBoltsEarned.add(gain),
-        totalClicks: s.totalClicks + 1,
+        nutsAndBolts: prevS.nutsAndBolts.add(gain),
+        totalNutsAndBoltsEarned: prevS.totalNutsAndBoltsEarned.add(gain),
+        totalClicks: prevS.totalClicks + 1,
       };
-      const partial = { ...s, ...next };
+      const partial = { ...prevS, ...next };
       next.achievements = checkAchievements(partial as GameState);
       return next;
     });
@@ -593,6 +606,26 @@ export const useGameStore = create<Store>((set, get) => ({
     const partial = { ...s, ...next };
     next.achievements = checkAchievements(partial as GameState);
     set(next);
+  },
+
+  upgradeScrapValue: () => {
+    const s = get();
+    const cost = clickPowerUpgradeCost(s.scrapValueLevel);
+    if (s.nutsAndBolts.lt(cost)) return;
+    set({
+      nutsAndBolts: s.nutsAndBolts.sub(cost),
+      scrapValueLevel: s.scrapValueLevel + 1,
+    });
+  },
+
+  upgradeCritChance: () => {
+    const s = get();
+    const cost = critChanceUpgradeCost(s.critChanceLevel);
+    if (s.nutsAndBolts.lt(cost)) return;
+    set({
+      nutsAndBolts: s.nutsAndBolts.sub(cost),
+      critChanceLevel: s.critChanceLevel + 1,
+    });
   },
 
   // -------------------------------------------------------------------------
