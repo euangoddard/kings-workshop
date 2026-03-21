@@ -1,3 +1,4 @@
+import { useState } from "preact/hooks";
 import { armyDPSFull } from "../engine/economy";
 import { fmt, fmtNum } from "../lib/format";
 import { useGameStore } from "../store/gameStore";
@@ -16,6 +17,14 @@ export default function ResourceBar() {
   const totalClicks = useGameStore((s) => s.totalClicks);
   const saveGame = useGameStore((s) => s.saveGame);
   const resetGame = useGameStore((s) => s.resetGame);
+
+  const [savedFlash, setSavedFlash] = useState(false);
+
+  const handleSave = () => {
+    saveGame();
+    setSavedFlash(true);
+    setTimeout(() => setSavedFlash(false), 2000);
+  };
 
   const dps = armyDPSFull(
     infantry,
@@ -135,10 +144,14 @@ export default function ResourceBar() {
         </a>
         <button
           type="button"
-          onClick={saveGame}
-          className="px-3 py-1 text-xs bg-slate-700 hover:bg-slate-600 text-slate-300 rounded border border-slate-600 transition-colors"
+          onClick={handleSave}
+          className={`px-3 py-1 text-xs rounded border transition-colors ${
+            savedFlash
+              ? "bg-green-800/60 text-green-300 border-green-700"
+              : "bg-slate-700 hover:bg-slate-600 text-slate-300 border-slate-600"
+          }`}
         >
-          Save
+          {savedFlash ? "✓ Saved!" : "Save"}
         </button>
         <button
           type="button"
