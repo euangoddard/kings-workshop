@@ -217,6 +217,40 @@ export function armyDPSFull(
 }
 
 // ---------------------------------------------------------------------------
+// Click upgrades
+// ---------------------------------------------------------------------------
+
+/**
+ * N&B gained per manual click (before crit multiplier).
+ * Base 1 + 1 per upgrade level.
+ */
+export function clickPower(scrapValueLevel: number): number {
+  return 1 + scrapValueLevel;
+}
+
+/**
+ * Effective crit chance including upgrades.
+ * Base 1% + 1% per upgrade level.
+ */
+export function effectiveCritChance(critChanceLevel: number): number {
+  return CRIT_CHANCE + critChanceLevel * 0.01;
+}
+
+/**
+ * Cost to upgrade click power. floor(15 × 3.0^level)
+ */
+export function clickPowerUpgradeCost(level: number): Decimal {
+  return new Decimal(Math.floor(15 * 3.0 ** level));
+}
+
+/**
+ * Cost to upgrade crit chance. floor(50 × 3.5^level)
+ */
+export function critChanceUpgradeCost(level: number): Decimal {
+  return new Decimal(Math.floor(50 * 3.5 ** level));
+}
+
+// ---------------------------------------------------------------------------
 // Elite boss helpers (Phase 2)
 // ---------------------------------------------------------------------------
 
