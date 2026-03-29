@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { getBossMetadata } from "../data/bosses";
 import {
   armyDPSFull,
@@ -69,6 +69,9 @@ export default function BossPanel() {
 
   const bossInfo = getBossMetadata(currentBoss);
   const [isDamaged, setIsDamaged] = useState(false);
+  const [showVictory, setShowVictory] = useState(false);
+  const [victoryBossNum, setVictoryBossNum] = useState(0);
+  const prevBossActiveRef = useRef(false);
 
   useEffect(() => {
     if (bossActive) {
@@ -77,6 +80,45 @@ export default function BossPanel() {
       return () => clearTimeout(timer);
     }
   }, [bossHPVal, bossActive]);
+
+  useEffect(() => {
+    if (prevBossActiveRef.current && !bossActive) {
+      // bossActive just went false — boss was defeated
+      // currentBoss is already incremented, so the defeated boss is currentBoss - 1
+      setVictoryBossNum(currentBoss - 1);
+      setShowVictory(true);
+      const timer = setTimeout(() => setShowVictory(false), 1800);
+      return () => clearTimeout(timer);
+    }
+    prevBossActiveRef.current = bossActive;
+  }, [bossActive, currentBoss]);
+
+  if (showVictory) {
+    const defeatedBossInfo = getBossMetadata(victoryBossNum);
+    const defeatedReward = effectiveBossReward(victoryBossNum);
+    const defeatedElite = isEliteBoss(victoryBossNum);
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none animate-boss-victory-out">
+        <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm" />
+        <div className="relative flex flex-col items-center gap-3 animate-boss-victory-in">
+          <div
+            className={`text-5xl font-bold drop-shadow-[0_0_24px_rgba(251,191,36,0.9)] ${defeatedElite ? "text-amber-300" : "text-amber-400"}`}
+          >
+            VICTORY!
+          </div>
+          <div className="text-slate-300 text-base">
+            {defeatedElite && (
+              <span className="text-amber-400 font-bold">⚡ Elite </span>
+            )}
+            {defeatedBossInfo.name} defeated
+          </div>
+          <div className="text-amber-300 text-sm font-bold">
+            +{fmt(defeatedReward)} N&amp;B
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (bossActive) {
     return (
