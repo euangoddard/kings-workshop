@@ -174,7 +174,14 @@ export default function BossPanel() {
           </div>
 
           {/* HP bar */}
-          <div className="w-full bg-slate-800 rounded-full h-5 border border-slate-700 overflow-hidden shadow-inner">
+          <div
+            role="progressbar"
+            aria-label={`${bossInfo.name} health`}
+            aria-valuenow={Math.round(hpRatio * 100)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            className="w-full bg-slate-800 rounded-full h-5 border border-slate-700 overflow-hidden shadow-inner"
+          >
             <div
               className="h-5 rounded-full transition-all duration-200"
               style={{
@@ -210,7 +217,14 @@ export default function BossPanel() {
               </span>
             </div>
             {/* Charge bar */}
-            <div className="w-full bg-slate-800 rounded-full h-3 border border-slate-700 overflow-hidden">
+            <div
+              role="progressbar"
+              aria-label="Special attack charge"
+              aria-valuenow={Math.round(specialAttackCharge)}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              className="w-full bg-slate-800 rounded-full h-3 border border-slate-700 overflow-hidden"
+            >
               <div
                 className="h-3 rounded-full transition-all duration-300"
                 style={{

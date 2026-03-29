@@ -158,7 +158,7 @@ function TroopIcons() {
       style={{ left: "50%", top: "25%", transform: "translateX(-50%)" }}
     >
       {/* SVG handles triangles for shield bottom and mage crystal top */}
-      <svg width="120" height="48" viewBox="-60 -24 120 48" overflow="visible">
+      <svg width="120" height="48" viewBox="-60 -24 120 48" overflow="visible" aria-hidden="true">
         {/* Infantry shield */}
         <rect
           x="-53"

@@ -88,7 +88,14 @@ export default function CollectorPanel() {
         </div>
 
         {/* Fill bar */}
-        <div className="w-full bg-slate-700 rounded-full h-2 mb-2">
+        <div
+          role="progressbar"
+          aria-label="Collector fill"
+          aria-valuenow={Number(fillPct)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          className="w-full bg-slate-700 rounded-full h-2 mb-2"
+        >
           <div
             className="bg-cyan-500 h-2 rounded-full transition-all duration-300"
             style={{ width: `${fillPct}%` }}
