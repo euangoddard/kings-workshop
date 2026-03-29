@@ -4,13 +4,13 @@ import {
   archerEquipCost,
   armyDPSFull,
   bossDamage,
+  CRIT_MULTIPLIER,
   cavalryEquipCost,
   clickFightDamage,
   clickPower,
   clickPowerUpgradeCost,
   collectorUpgradeCost,
   critChanceUpgradeCost,
-  CRIT_MULTIPLIER,
   effectiveBossHP,
   effectiveBossReward,
   effectiveCollectorCapacity,
@@ -20,8 +20,16 @@ import {
   infantryEquipCost,
   isEliteBoss,
   mageEquipCost,
+  SPECIAL_BUFF_DURATION,
+  SPECIAL_BUFF_MULTIPLIER,
+  SPECIAL_CHARGE_RATE,
+  SPECIAL_CLICK_GAIN,
+  SPECIAL_MIN_CHARGE,
   soldierSpawnCost,
   troopUpgradeCost,
+  turretBuildCost,
+  turretDPS,
+  turretUpgradeCost,
 } from "../engine/economy";
 import type {
   Achievement,
@@ -328,6 +336,13 @@ function freshState(): GameState {
     scrapValueLevel: 0,
     critChanceLevel: 0,
 
+    turretCount: 0,
+    turretLevel: 0,
+
+    specialAttackCharge: 0,
+    specialAttackBuffActive: false,
+    specialAttackBuffTimer: 0,
+
     lastSaveTime: Date.now(),
     lastTickTime: Date.now(),
   };
@@ -363,6 +378,11 @@ function serialize(s: GameState): SerializedGameState {
     achievements: s.achievements,
     scrapValueLevel: s.scrapValueLevel,
     critChanceLevel: s.critChanceLevel,
+    turretCount: s.turretCount,
+    turretLevel: s.turretLevel,
+    specialAttackCharge: s.specialAttackCharge,
+    specialAttackBuffActive: s.specialAttackBuffActive,
+    specialAttackBuffTimer: s.specialAttackBuffTimer,
     lastSaveTime: s.lastSaveTime,
     lastTickTime: Date.now(),
   };
@@ -402,6 +422,11 @@ function deserialize(raw: SerializedGameState): GameState {
     achievements: mergedAchievements,
     scrapValueLevel: raw.scrapValueLevel ?? 0,
     critChanceLevel: raw.critChanceLevel ?? 0,
+    turretCount: raw.turretCount ?? 0,
+    turretLevel: raw.turretLevel ?? 0,
+    specialAttackCharge: raw.specialAttackCharge ?? 0,
+    specialAttackBuffActive: raw.specialAttackBuffActive ?? false,
+    specialAttackBuffTimer: raw.specialAttackBuffTimer ?? 0,
     lastSaveTime: raw.lastSaveTime,
     lastTickTime: raw.lastTickTime,
   };
@@ -629,6 +654,66 @@ export const useGameStore = create<Store>((set, get) => ({
   },
 
   // -------------------------------------------------------------------------
+  // Turrets
+  // -------------------------------------------------------------------------
+  buildTurret: () => {
+    const s = get();
+    const cost = turretBuildCost(s.turretCount);
+    if (s.nutsAndBolts.lt(cost)) return;
+    set({
+      nutsAndBolts: s.nutsAndBolts.sub(cost),
+      turretCount: s.turretCount + 1,
+    });
+  },
+
+  upgradeTurret: () => {
+    const s = get();
+    const cost = turretUpgradeCost(s.turretLevel);
+    if (s.nutsAndBolts.lt(cost)) return;
+    set({
+      nutsAndBolts: s.nutsAndBolts.sub(cost),
+      turretLevel: s.turretLevel + 1,
+    });
+  },
+
+  // -------------------------------------------------------------------------
+  // Special attack
+  // -------------------------------------------------------------------------
+  activateSpecialAttack: (mode) => {
+    const s = get();
+    if (s.specialAttackCharge < SPECIAL_MIN_CHARGE) return;
+    if (!s.bossActive && mode === "damage") return;
+
+    if (mode === "damage") {
+      const armyDps = armyDPSFull(
+        s.infantry,
+        s.infantryUpgrades.damage,
+        s.archers,
+        s.archerUpgrades.damage,
+        s.cavalry,
+        s.cavalryUpgrades.damage,
+        s.mages,
+        s.mageUpgrades.damage,
+      );
+      const totalDps = armyDps + s.turretCount * turretDPS(s.turretLevel);
+      const burstDmg = new Decimal(totalDps * 5);
+      const newHP = Decimal.max(new Decimal(0), s.bossHP.sub(burstDmg));
+      if (newHP.lte(0)) {
+        set({ specialAttackCharge: 0 });
+        get()._defeatBoss();
+      } else {
+        set({ bossHP: newHP, specialAttackCharge: 0 });
+      }
+    } else {
+      set({
+        specialAttackCharge: 0,
+        specialAttackBuffActive: true,
+        specialAttackBuffTimer: SPECIAL_BUFF_DURATION,
+      });
+    }
+  },
+
+  // -------------------------------------------------------------------------
   // Boss
   // -------------------------------------------------------------------------
   startBoss: () => {
@@ -647,10 +732,12 @@ export const useGameStore = create<Store>((set, get) => ({
     }
     const dmg = new Decimal(clickFightDamage(s.soldiers));
     const newHP = Decimal.max(new Decimal(0), s.bossHP.sub(dmg));
+    const newCharge = Math.min(100, s.specialAttackCharge + SPECIAL_CLICK_GAIN);
     if (newHP.lte(0)) {
+      set({ specialAttackCharge: newCharge });
       get()._defeatBoss();
     } else {
-      set({ bossHP: newHP });
+      set({ bossHP: newHP, specialAttackCharge: newCharge });
     }
   },
 
@@ -701,20 +788,36 @@ export const useGameStore = create<Store>((set, get) => ({
     }
     updates.collectorFill = newFill;
 
+    // --- Special attack charge & buff countdown ---
+    if (s.bossActive) {
+      updates.specialAttackCharge = Math.min(
+        100,
+        s.specialAttackCharge + SPECIAL_CHARGE_RATE * deltaSec,
+      );
+    }
+    if (s.specialAttackBuffActive) {
+      const newTimer = Math.max(0, s.specialAttackBuffTimer - deltaSec);
+      updates.specialAttackBuffTimer = newTimer;
+      if (newTimer <= 0) {
+        updates.specialAttackBuffActive = false;
+      }
+    }
+
     // --- Boss auto-battle ---
     if (s.bossActive) {
-      const dps = new Decimal(
-        armyDPSFull(
-          s.infantry,
-          s.infantryUpgrades.damage,
-          s.archers,
-          s.archerUpgrades.damage,
-          s.cavalry,
-          s.cavalryUpgrades.damage,
-          s.mages,
-          s.mageUpgrades.damage,
-        ),
+      const baseArmyDps = armyDPSFull(
+        s.infantry,
+        s.infantryUpgrades.damage,
+        s.archers,
+        s.archerUpgrades.damage,
+        s.cavalry,
+        s.cavalryUpgrades.damage,
+        s.mages,
+        s.mageUpgrades.damage,
       );
+      const buffMult = s.specialAttackBuffActive ? SPECIAL_BUFF_MULTIPLIER : 1;
+      const totalTurretDps = s.turretCount * turretDPS(s.turretLevel);
+      const dps = new Decimal(baseArmyDps * buffMult + totalTurretDps);
       const dmg = dps.mul(deltaSec);
       const newHP = Decimal.max(new Decimal(0), s.bossHP.sub(dmg));
       if (newHP.lte(0)) {

@@ -5,5 +5,13 @@ export default defineConfig({
   plugins: [preact()],
   optimizeDeps: {
     include: ['break_infinity.js']
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        help: 'help.html',
+      }
+    }
   }
 })

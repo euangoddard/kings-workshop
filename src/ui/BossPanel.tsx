@@ -7,6 +7,10 @@ import {
   effectiveBossHP,
   effectiveBossReward,
   isEliteBoss,
+  SPECIAL_BUFF_DURATION,
+  SPECIAL_BUFF_MULTIPLIER,
+  SPECIAL_MIN_CHARGE,
+  turretDPS,
 } from "../engine/economy";
 import { fmt } from "../lib/format";
 import { useGameStore } from "../store/gameStore";
@@ -27,8 +31,17 @@ export default function BossPanel() {
   const cavalryUpgrades = useGameStore((s) => s.cavalryUpgrades);
   const mageUpgrades = useGameStore((s) => s.mageUpgrades);
 
+  const turretCount = useGameStore((s) => s.turretCount);
+  const turretLevel = useGameStore((s) => s.turretLevel);
+  const specialAttackCharge = useGameStore((s) => s.specialAttackCharge);
+  const specialAttackBuffActive = useGameStore(
+    (s) => s.specialAttackBuffActive,
+  );
+  const specialAttackBuffTimer = useGameStore((s) => s.specialAttackBuffTimer);
+
   const startBoss = useGameStore((s) => s.startBoss);
   const clickFight = useGameStore((s) => s.clickFight);
+  const activateSpecialAttack = useGameStore((s) => s.activateSpecialAttack);
 
   const elite = isEliteBoss(currentBoss);
   const hpRatio = bossActive
@@ -37,7 +50,7 @@ export default function BossPanel() {
   const nextHP = effectiveBossHP(currentBoss);
   const damage = bossDamage(currentBoss);
   const reward = effectiveBossReward(currentBoss);
-  const myDPS = armyDPSFull(
+  const baseArmyDPS = armyDPSFull(
     infantry,
     infantryUpgrades.damage,
     archers,
@@ -47,7 +60,12 @@ export default function BossPanel() {
     mages,
     mageUpgrades.damage,
   );
+  const buffMult = specialAttackBuffActive ? SPECIAL_BUFF_MULTIPLIER : 1;
+  const totalTurretDPS = turretCount * turretDPS(turretLevel);
+  const myDPS = baseArmyDPS * buffMult + totalTurretDPS;
   const clickDmg = clickFightDamage(soldiers);
+  const canUseSpecial = specialAttackCharge >= SPECIAL_MIN_CHARGE;
+  const burstDmg = (baseArmyDPS * buffMult + totalTurretDPS) * 5;
 
   const bossInfo = getBossMetadata(currentBoss);
   const [isDamaged, setIsDamaged] = useState(false);
@@ -134,6 +152,71 @@ export default function BossPanel() {
             </div>
             <div className="text-slate-500 text-sm">
               Boss DMG: {fmt(damage)}/s
+            </div>
+          </div>
+
+          {/* Special attack bar */}
+          <div className="w-full flex flex-col gap-1.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-violet-400 font-bold tracking-wide uppercase">
+                ⚡ Special Attack
+              </span>
+              <span className="text-slate-500">
+                {specialAttackBuffActive
+                  ? `Buff active — ${specialAttackBuffTimer.toFixed(1)}s`
+                  : `${specialAttackCharge.toFixed(0)}% / ${SPECIAL_MIN_CHARGE}%`}
+              </span>
+            </div>
+            {/* Charge bar */}
+            <div className="w-full bg-slate-800 rounded-full h-3 border border-slate-700 overflow-hidden">
+              <div
+                className="h-3 rounded-full transition-all duration-300"
+                style={{
+                  width: `${specialAttackCharge.toFixed(1)}%`,
+                  background: specialAttackBuffActive
+                    ? "linear-gradient(90deg, #7c3aed, #a855f7)"
+                    : canUseSpecial
+                      ? "linear-gradient(90deg, #6d28d9, #8b5cf6)"
+                      : "linear-gradient(90deg, #4c1d95, #6d28d9)",
+                }}
+              />
+            </div>
+            {/* Two activation buttons */}
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => activateSpecialAttack("damage")}
+                disabled={!canUseSpecial}
+                className={`flex-1 py-1.5 rounded border text-xs font-bold transition-all select-none ${
+                  canUseSpecial
+                    ? "bg-violet-800 hover:bg-violet-700 border-violet-500 text-violet-100 cursor-pointer active:scale-95"
+                    : "bg-slate-800 border-slate-700 text-slate-600 cursor-not-allowed"
+                }`}
+              >
+                💥 Burst Attack
+                <div
+                  className={`text-xs font-normal mt-0.5 ${canUseSpecial ? "text-violet-300" : "text-slate-600"}`}
+                >
+                  {fmt(burstDmg)} dmg
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => activateSpecialAttack("buff")}
+                disabled={!canUseSpecial}
+                className={`flex-1 py-1.5 rounded border text-xs font-bold transition-all select-none ${
+                  canUseSpecial
+                    ? "bg-indigo-800 hover:bg-indigo-700 border-indigo-500 text-indigo-100 cursor-pointer active:scale-95"
+                    : "bg-slate-800 border-slate-700 text-slate-600 cursor-not-allowed"
+                }`}
+              >
+                🛡️ Troop Buff
+                <div
+                  className={`text-xs font-normal mt-0.5 ${canUseSpecial ? "text-indigo-300" : "text-slate-600"}`}
+                >
+                  {SPECIAL_BUFF_MULTIPLIER}× DPS · {SPECIAL_BUFF_DURATION}s
+                </div>
+              </button>
             </div>
           </div>
 

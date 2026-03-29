@@ -5,6 +5,7 @@ import {
   effectiveCollectorCount,
 } from "../engine/economy";
 import { useGameStore } from "../store/gameStore";
+import { useUIStore } from "../store/uiStore";
 
 // ─── Colour palette (matches former Phaser palette) ──────────────────────────
 // Collector cyan→amber interpolation: #22d3ee → ~#f58f4a
@@ -320,6 +321,8 @@ function CollectorTrack() {
 
 // ─── Main scene ───────────────────────────────────────────────────────────────
 export default function GameScene() {
+  const leftPanelTab = useUIStore((s) => s.leftPanelTab);
+
   return (
     // Sits at z-index 0, starts below the 48px resource bar — mirrors old canvas position
     <div className="absolute inset-x-0 bottom-0" style={{ top: 48, zIndex: 0 }}>
@@ -350,16 +353,16 @@ export default function GameScene() {
           >
             <ZoneBg src="/assets/scrapyard_bg.png" />
             <p
-              className="absolute inset-x-0 text-center pointer-events-none"
+              className="absolute inset-x-0 text-center pointer-events-none uppercase"
               style={{
-                top: 28,
+                top: 40,
                 fontSize: 11,
                 color: "#94a3b8",
                 fontFamily: "Georgia, serif",
                 letterSpacing: 3,
               }}
             >
-              SCRAPYARD
+              {leftPanelTab === "turrets" ? "turrets" : "scrapyard"}
             </p>
             <ScrapPile />
           </div>
@@ -375,7 +378,7 @@ export default function GameScene() {
           >
             <ZoneBg src="/assets/workshop_bg.png" />
             <p
-              className="absolute inset-x-0 text-center pointer-events-none"
+              className="absolute inset-x-0 text-center pointer-events-none uppercase"
               style={{
                 top: 28,
                 fontSize: 11,
@@ -384,7 +387,7 @@ export default function GameScene() {
                 letterSpacing: 2,
               }}
             >
-              KING'S WORKSHOP
+              King's Workshop
             </p>
             <Anvil />
           </div>

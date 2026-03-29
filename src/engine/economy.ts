@@ -251,6 +251,51 @@ export function critChanceUpgradeCost(level: number): Decimal {
 }
 
 // ---------------------------------------------------------------------------
+// Turrets
+// ---------------------------------------------------------------------------
+
+export const TURRET_BASE_DPS = 10;
+
+/**
+ * DPS per turret at the given upgrade level.
+ * base × 1.5^level
+ */
+export function turretDPS(turretLevel: number): number {
+  return TURRET_BASE_DPS * 1.5 ** turretLevel;
+}
+
+/**
+ * Cost to build the next turret.
+ * floor(200 × 2.5^turretCount)
+ */
+export function turretBuildCost(turretCount: number): Decimal {
+  return new Decimal(Math.floor(200 * 2.5 ** turretCount));
+}
+
+/**
+ * Cost to upgrade turrets to the next level.
+ * floor(500 × 3.0^turretLevel)
+ */
+export function turretUpgradeCost(turretLevel: number): Decimal {
+  return new Decimal(Math.floor(500 * 3.0 ** turretLevel));
+}
+
+// ---------------------------------------------------------------------------
+// Special Attack
+// ---------------------------------------------------------------------------
+
+/** % charge gained per second while a boss battle is active */
+export const SPECIAL_CHARGE_RATE = 5;
+/** % charge gained per manual "Fight!" click */
+export const SPECIAL_CLICK_GAIN = 3;
+/** Minimum charge % required to activate the special attack */
+export const SPECIAL_MIN_CHARGE = 80;
+/** Duration of the troop DPS buff in seconds */
+export const SPECIAL_BUFF_DURATION = 15;
+/** DPS multiplier applied to the army while the buff is active */
+export const SPECIAL_BUFF_MULTIPLIER = 2;
+
+// ---------------------------------------------------------------------------
 // Elite boss helpers (Phase 2)
 // ---------------------------------------------------------------------------
 

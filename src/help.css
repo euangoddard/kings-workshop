@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+body {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.panel {
+  background: rgba(15, 23, 42, 0.85);
+}
+
+/* Troop colour tokens */
+.infantry {
+  --accent: #a855f7;
+  --accent-dim: rgba(88, 28, 135, 0.5);
+  --border: #7e22ce;
+  --text: #d8b4fe;
+}
+.archer {
+  --accent: #22c55e;
+  --accent-dim: rgba(20, 83, 45, 0.5);
+  --border: #15803d;
+  --text: #86efac;
+}
+.cavalry {
+  --accent: #f59e0b;
+  --accent-dim: rgba(120, 53, 15, 0.5);
+  --border: #b45309;
+  --text: #fcd34d;
+}
+.mage {
+  --accent: #3b82f6;
+  --accent-dim: rgba(30, 58, 138, 0.5);
+  --border: #1d4ed8;
+  --text: #93c5fd;
+}
+
+.troop-card {
+  background: var(--accent-dim);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.troop-label {
+  color: var(--text);
+}
+
+/* Decorative divider */
+.ruled {
+  border-top: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+/* Section anchor offset */
+:target {
+  scroll-margin-top: 4rem;
+}

@@ -57,6 +57,15 @@ export interface GameState {
   scrapValueLevel: number;
   critChanceLevel: number;
 
+  // Turrets
+  turretCount: number;
+  turretLevel: number;
+
+  // Special attack
+  specialAttackCharge: number; // 0–100 %
+  specialAttackBuffActive: boolean;
+  specialAttackBuffTimer: number; // seconds remaining
+
   // Meta
   lastSaveTime: number;
   lastTickTime: number;
@@ -83,6 +92,10 @@ export interface GameActions {
 
   upgradeScrapValue: () => void;
   upgradeCritChance: () => void;
+
+  buildTurret: () => void;
+  upgradeTurret: () => void;
+  activateSpecialAttack: (mode: "damage" | "buff") => void;
 
   startBoss: () => void;
   _defeatBoss: () => void;
@@ -124,6 +137,11 @@ export interface SerializedGameState {
   achievements: Achievement[];
   scrapValueLevel: number;
   critChanceLevel: number;
+  turretCount: number;
+  turretLevel: number;
+  specialAttackCharge: number;
+  specialAttackBuffActive: boolean;
+  specialAttackBuffTimer: number;
   lastSaveTime: number;
   lastTickTime: number;
 }

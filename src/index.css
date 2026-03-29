@@ -18,11 +18,6 @@ body,
   font-family: Georgia, "Times New Roman", serif;
 }
 
-/* Phaser canvas fills its container */
-canvas {
-  display: block;
-}
-
 /* Custom scrollbar for any overflow panels */
 ::-webkit-scrollbar {
   width: 4px;
