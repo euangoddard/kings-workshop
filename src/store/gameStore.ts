@@ -636,7 +636,9 @@ export const useGameStore = create<Store>((set, get) => ({
   upgradeScrapValue: () => {
     const s = get();
     const cost = clickPowerUpgradeCost(s.scrapValueLevel);
-    if (s.nutsAndBolts.lt(cost)) return;
+    if (s.nutsAndBolts.lt(cost)) {
+      return;
+    }
     set({
       nutsAndBolts: s.nutsAndBolts.sub(cost),
       scrapValueLevel: s.scrapValueLevel + 1,
@@ -646,7 +648,9 @@ export const useGameStore = create<Store>((set, get) => ({
   upgradeCritChance: () => {
     const s = get();
     const cost = critChanceUpgradeCost(s.critChanceLevel);
-    if (s.nutsAndBolts.lt(cost)) return;
+    if (s.nutsAndBolts.lt(cost)) {
+      return;
+    }
     set({
       nutsAndBolts: s.nutsAndBolts.sub(cost),
       critChanceLevel: s.critChanceLevel + 1,
@@ -659,7 +663,9 @@ export const useGameStore = create<Store>((set, get) => ({
   buildTurret: () => {
     const s = get();
     const cost = turretBuildCost(s.turretCount);
-    if (s.nutsAndBolts.lt(cost)) return;
+    if (s.nutsAndBolts.lt(cost)) {
+      return;
+    }
     set({
       nutsAndBolts: s.nutsAndBolts.sub(cost),
       turretCount: s.turretCount + 1,
@@ -669,7 +675,9 @@ export const useGameStore = create<Store>((set, get) => ({
   upgradeTurret: () => {
     const s = get();
     const cost = turretUpgradeCost(s.turretLevel);
-    if (s.nutsAndBolts.lt(cost)) return;
+    if (s.nutsAndBolts.lt(cost)) {
+      return;
+    }
     set({
       nutsAndBolts: s.nutsAndBolts.sub(cost),
       turretLevel: s.turretLevel + 1,
@@ -681,8 +689,12 @@ export const useGameStore = create<Store>((set, get) => ({
   // -------------------------------------------------------------------------
   activateSpecialAttack: (mode) => {
     const s = get();
-    if (s.specialAttackCharge < SPECIAL_MIN_CHARGE) return;
-    if (!s.bossActive && mode === "damage") return;
+    if (s.specialAttackCharge < SPECIAL_MIN_CHARGE) {
+      return;
+    }
+    if (!s.bossActive && mode === "damage") {
+      return;
+    }
 
     if (mode === "damage") {
       const armyDps = armyDPSFull(
