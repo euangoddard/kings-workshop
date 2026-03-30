@@ -359,8 +359,16 @@ export default function GameScene() {
             }}
           >
             <ZoneBg
-              src="/assets/scrapyard_bg.webp"
-              alt="Scrapyard background"
+              src={
+                leftPanelTab === "turrets"
+                  ? "/assets/turrets_bg.webp"
+                  : "/assets/scrapyard_bg.webp"
+              }
+              alt={
+                leftPanelTab === "turrets"
+                  ? "Turrets background"
+                  : "Scrapyard background"
+              }
             />
             <p
               className="absolute inset-x-0 text-center pointer-events-none uppercase"
@@ -374,7 +382,7 @@ export default function GameScene() {
             >
               {leftPanelTab === "turrets" ? "turrets" : "scrapyard"}
             </p>
-            <ScrapPile />
+            {leftPanelTab !== "turrets" && <ScrapPile />}
           </div>
 
           {/* Workshop zone */}
