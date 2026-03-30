@@ -17,12 +17,13 @@ const COLLECTOR_B0 = 0xee,
   COLLECTOR_B1 = 0x4a;
 
 // ─── Zone background image ───────────────────────────────────────────────────
-function ZoneBg({ src }: { src: string }) {
+function ZoneBg({ src, alt }: { src: string; alt: string }) {
   return (
     <img
       src={src}
       className="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none select-none"
-      alt=""
+      alt={alt}
+      fetchPriority="high"
     />
   );
 }
@@ -158,7 +159,13 @@ function TroopIcons() {
       style={{ left: "50%", top: "25%", transform: "translateX(-50%)" }}
     >
       {/* SVG handles triangles for shield bottom and mage crystal top */}
-      <svg width="120" height="48" viewBox="-60 -24 120 48" overflow="visible" aria-hidden="true">
+      <svg
+        width="120"
+        height="48"
+        viewBox="-60 -24 120 48"
+        overflow="visible"
+        aria-hidden="true"
+      >
         {/* Infantry shield */}
         <rect
           x="-53"
@@ -335,7 +342,7 @@ export default function GameScene() {
           borderBottom: "1px solid #334155",
         }}
       >
-        <ZoneBg src="/assets/boss_bg.png" />
+        <ZoneBg src="/assets/boss_bg.webp" alt="Boss background" />
       </div>
 
       {/* Main area — absolutely fills from 22% to bottom */}
@@ -351,7 +358,10 @@ export default function GameScene() {
               borderRight: "1px solid #334155",
             }}
           >
-            <ZoneBg src="/assets/scrapyard_bg.png" />
+            <ZoneBg
+              src="/assets/scrapyard_bg.webp"
+              alt="Scrapyard background"
+            />
             <p
               className="absolute inset-x-0 text-center pointer-events-none uppercase"
               style={{
@@ -376,7 +386,7 @@ export default function GameScene() {
               border: "2px solid #f59e0b",
             }}
           >
-            <ZoneBg src="/assets/workshop_bg.png" />
+            <ZoneBg src="/assets/workshop_bg.webp" alt="Workshop background" />
             <p
               className="absolute inset-x-0 text-center pointer-events-none uppercase"
               style={{
@@ -401,7 +411,7 @@ export default function GameScene() {
               borderLeft: "1px solid #334155",
             }}
           >
-            <ZoneBg src="/assets/armoury_bg.png" />
+            <ZoneBg src="/assets/armoury_bg.webp" alt="Armoury background" />
             <TroopIcons />
           </div>
 
